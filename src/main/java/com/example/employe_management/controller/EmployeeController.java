@@ -156,7 +156,7 @@ public ResponseEntity<Object> deleteEmployee(@PathVariable Long id) {
 public ResponseEntity<Object> getEmployee(@PathVariable Long id) {
     Optional<emolyer> existingUserOptional = userrepositry.findById(id);
     if (!existingUserOptional.isPresent()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not foun");
     }
 
     emolyer existingUser = existingUserOptional.get();
