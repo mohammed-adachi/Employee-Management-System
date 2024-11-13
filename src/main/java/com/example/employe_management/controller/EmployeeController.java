@@ -62,6 +62,10 @@ public class EmployeeController {
     user.setName(registerDLO.getName());
     user.setPassword(bCryptPassword.encode(registerDLO.getPassword()));
     user.setEmail(registerDLO.getEmail());
+    user.setPost("inconnu");
+    user.setSalaire(0.0);
+    user.setAction("inconnu");
+
     user.setAddress(registerDLO.getAddress());
     user.setPhone(registerDLO.getPhone());
     
@@ -125,7 +129,11 @@ public class EmployeeController {
   
     // Update user fields
     existingUser.setName(updateDLO.getName());
+    
     existingUser.setEmail(updateDLO.getEmail());
+    existingUser.setPost(updateDLO.getPost());
+    existingUser.setSalaire(updateDLO.getSalaire());
+    existingUser.setAction(updateDLO.getAction());
     existingUser.setAddress(updateDLO.getAddress());
     existingUser.setPhone(updateDLO.getPhone());
   
