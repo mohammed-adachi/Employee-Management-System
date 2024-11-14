@@ -1,0 +1,24 @@
+<div class="container my-5">
+  <h1 class="mb-4">Update Employee</h1>
+
+  <form [formGroup]="updateForm"  (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" formControlName="name">
+    </div>
+    <div class="form-group">
+      <label for="post">post</label>
+      <input type="text" class="form-control" id="post" formControlName="post">
+    </div>
+    <div class="form-group">
+      <label for="salaire">Salaire</label>
+      <input type="number" class="form-control" id="salaire" formControlName="salaire">
+    </div>
+    <div class="form-group">
+      <label for="address">address</label>
+      <input type="text" class="form-control" id="address" formControlName="address">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="button" class="btn btn-secondary" >Cancel</button>
+  </form>
+</div>
