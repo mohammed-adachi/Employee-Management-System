@@ -2,6 +2,7 @@ package com.example.employe_management.controller;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.employe_management.exception.ResourceNotFoundException;
 import com.example.employe_management.models.emolyer;
 import com.example.employe_management.models.registerDLO;
 import com.example.employe_management.repostry.employeRepostry;
@@ -62,8 +65,8 @@ public class EmployeeController {
     user.setName(registerDLO.getName());
     user.setPassword(bCryptPassword.encode(registerDLO.getPassword()));
     user.setEmail(registerDLO.getEmail());
-    user.setPost("inconnu");
-    user.setSalaire(0.0);
+    user.setSalaire(registerDLO.getSalaire());
+    user.setPost(registerDLO.getPost());
     user.setAction("inconnu");
 
     user.setAddress(registerDLO.getAddress());
@@ -93,58 +96,22 @@ public class EmployeeController {
     }
     return ResponseEntity.badRequest().body("error");
   }
-  @PutMapping("/update/{id}")
-  public ResponseEntity<Object> updateEmployee(
-      @PathVariable Long id,
-      @Valid @RequestBody registerDLO updateDLO,
-      BindingResult result) {
-  
-    if (result.hasErrors()) {
-      var errorList = result.getAllErrors();
-      var errorMap = new HashMap<String, String>();
-      for (var error : errorList) {
-        errorMap.put(error.getObjectName(), error.getDefaultMessage());
-      }
-      return ResponseEntity.badRequest().body(errorMap);
-    }
-  
-    Optional<emolyer> existingUserOptional = userrepositry.findById(id);
-    if (!existingUserOptional.isPresent()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-    }
-  
-    emolyer existingUser = existingUserOptional.get();
-  
-    // Check for email conflicts: Ensure the email is not already used by another user
-    emolyer otherUserWithEmail = userrepositry.findByEmail(updateDLO.getEmail());
-    if (otherUserWithEmail != null && otherUserWithEmail.getId()!=id) {
-      return ResponseEntity.badRequest().body("Email already in use by another user");
-    }
-  
-    // Check for name conflicts: Ensure the name is not already used by another user
-    emolyer otherUserWithName = userrepositry.findByName(updateDLO.getName());
-    if (otherUserWithName != null && otherUserWithName.getId()!=id){
-      return ResponseEntity.badRequest().body("Username already in use by another user");
-    }
-  
-    // Update user fields
-    existingUser.setName(updateDLO.getName());
-    
-    existingUser.setEmail(updateDLO.getEmail());
-    existingUser.setPost(updateDLO.getPost());
-    existingUser.setSalaire(updateDLO.getSalaire());
-    existingUser.setAction(updateDLO.getAction());
-    existingUser.setAddress(updateDLO.getAddress());
-    existingUser.setPhone(updateDLO.getPhone());
-  
-    userrepositry.save(existingUser);
-  
-    var response = new HashMap<String, Object>();
-    response.put("user", existingUser);
-    response.put("token", createJwtToken(existingUser));
-  
-    return ResponseEntity.ok(response);
-  }
+  @PutMapping("/updatee/{id}")
+  public ResponseEntity<emolyer> updateEmployee(@PathVariable Long id, @RequestBody emolyer employeeDetails) {
+    emolyer employee = userrepositry.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+
+    // Mettre à jour les champs de l'employé
+    employee.setName(employeeDetails.getName());
+    employee.setPost(employeeDetails.getPost());
+    employee.setAddress(employeeDetails.getAddress());
+    employee.setSalaire(employeeDetails.getSalaire());
+    employee.setPhone(employeeDetails.getPhone());
+
+    // Sauvegarder les modifications
+    emolyer updatedEmployee = userrepositry.save(employee);
+    return ResponseEntity.ok(updatedEmployee);
+}
   @DeleteMapping("/delete/{id}")
 public ResponseEntity<Object> deleteEmployee(@PathVariable Long id) {
     Optional<emolyer> existingUserOptional = userrepositry.findById(id);
@@ -172,6 +139,17 @@ public ResponseEntity<Object> getEmployee(@PathVariable Long id) {
     // Retourner les détails de l'utilisateur
     return ResponseEntity.ok(existingUser);
 }
+@GetMapping("/employees/{id}")
+	public ResponseEntity<emolyer> getByID(@PathVariable Long id) {
+		emolyer employee = userrepositry.findById(id).
+				orElseThrow(()-> new ResourceNotFoundException("Employee with id "+id+"does not exists"));
+		return ResponseEntity.ok(employee);
+	}
+
+  @GetMapping("/employees")
+	public List <emolyer> getAllEmployees(){
+		return userrepositry.findAll();
+	} 
 
 
     private String createJwtToken(emolyer user){

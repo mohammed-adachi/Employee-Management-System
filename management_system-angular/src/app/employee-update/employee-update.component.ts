@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject, Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../service/employee.service';
 import { Employee } from '../employee';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http';
+import { response } from 'express';
+import { json } from 'stream/consumers';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-employee-update',
@@ -12,7 +15,9 @@ import { HttpHeaders } from '@angular/common/http';
   templateUrl: './employee-update.component.html',
   styleUrls: ['./employee-update.component.css']
 })
-export class EmployeeUpdateComponent {
+
+
+export class EmployeeUpdateComponent implements OnInit {
   updateForm!: FormGroup;
   formResult: string = "";
 
@@ -45,36 +50,63 @@ export class EmployeeUpdateComponent {
 
   }
 
-  onSubmit(){
-    console.log("salam")
+test(){
+  const data = {
+    "name": "user 7",
+    "salaire":6666,
+    "post":"emp",
+    "address":"adress"
+  };
+  console.log(data);
 
-    const formValues = this.updateForm.value;
+  // Si vous voulez voir le format JSON spécifiquement
+  console.log(JSON.stringify(data, null, 2));
+};
+
+
+  onSubmit(){
+   const formValues = this.updateForm.value;
     console.log(formValues)
+
+   this.employeeService.updateEmploye(this.id,formValues).subscribe(response => {
+console.log(response);
+    });
+    
+
+
+
+
+
+    // Si vous voulez voir le format JSON spécifiquement
+
+
+
+    //const formValues = this.updateForm.value;
+    //console.log(formValues)
     // L'objet JavaScript
 
     // Options HTTP avec en-tête Content-Type
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-  this.employeeService.updateEmployee(this.id,
-    formValues, httpOptions
-  ).subscribe({
-    next: (response: any) => {
-      console.log(response); // Vérifie la réponse
-      if (response.name != null) {
-        alert("Hello " + response.name);
-      }
-    },
-    error: (error) => {
-      console.error("Erreur lors de l'enregistrement :", error);
-    },
-    complete: () => {
-      console.log("Souscription terminée.");
-    }
-  }
-  )
+    //const httpOptions = {
+      //headers: new HttpHeaders({
+        //'Content-Type': 'application/json'
+      //})
+    //};
+  //this.employeeService.updateEmployee(this.id,data, httpOptions
+  //).subscribe({
+    //next: (response: any) => {
+      //console.log(response); // Vérifie la réponse
+      //if (response.name != null) {
+        //alert("Hello " + response.name);
+      //}
+    //},
+    //error: (error) => {
+      //console.error("Erreur lors de l'enregistrement :", error);
+    //},
+    //complete: () => {
+      //console.log("Souscription terminée.");
+    //}
+  //}
+ // )
 }
 
 

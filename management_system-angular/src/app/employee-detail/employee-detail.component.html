@@ -1,0 +1,19 @@
+<div class="container my-5">
+  <h1>Détails de l'employé</h1>
+
+  <div >
+    <div class="card my-4">
+      <div class="card-body">
+        <h5 class="card-title">{{ employee.name }}</h5>
+        <p class="card-text"><strong>Email:</strong> {{ employee.email}}</p>
+        <p class="card-text"><strong>Adresse:</strong> {{ employee.address }}</p>
+        <p class="card-text"><strong>Téléphone:</strong> 0699887766</p>
+      </div>
+    </div>
+    <button class="btn btn-secondary" (click)="goBack()">Retour à la liste</button>
+  </div>
+
+  <div >
+    <p>Chargement des détails de l'employé...</p>
+  </div>
+</div>

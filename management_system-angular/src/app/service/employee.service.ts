@@ -19,17 +19,37 @@ export class EmployeeService {
     return this.http.get<Employee[]>(`${this.baseURL}/employees`);
   }
   getEmployeeById(id: number): Observable<Employee>{
-    return this.http.get<Employee>(`${this.baseURL}/${id}`);
+    return this.http.get<Employee>(`${this.baseURL}/get/${id}`);
   }
   register(signRequest: any,httpOptions:any): Observable<any> {
+
     console.log(signRequest)
-    return this.http.put("http://localhost:8083/api/employees/register", signRequest,httpOptions);
+    return this.http.post("http://localhost:8083/api/employees/register", signRequest,httpOptions);
   }
   registers(signRequest: any): Observable<any> {
     console.log(signRequest)
     return this.http.post("http://localhost:8083/api/employees/register", signRequest);
   }
   updateEmployee(id: number, signRequest: any,httpOptions:any): Observable<any>{
-    return this.http.put(`${this.baseURLS}/updatee/${id}`, signRequest,httpOptions);
+    console.log(signRequest);
+    return this.http.put(`${this.baseURLS}/updatee/${id}`,signRequest,httpOptions);
+  }
+  updateEmploye(id: number, signRequest: any): Observable<any>{
+    console.log(signRequest);
+
+    // Convertir en JSON (facultatif) mais s'assurer que le Content-Type est correct
+    const data = JSON.stringify(signRequest);
+    console.log(data);
+
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return this.http.put(`${this.baseURL}/updatee/${id}`,data,httpOptions);
+  }
+
+  deleteEmployee(id: number): Observable<Object>{
+    return this.http.delete(`${this.baseURL}/delete/${id}`);
   }
 }

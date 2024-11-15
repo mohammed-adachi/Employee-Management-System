@@ -4,11 +4,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,7 +20,8 @@ import com.example.employe_management.services.employerService;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-
+@Configuration
+@EnableWebSecurity
 public class securityconfig  {
 @Value("${security.jwt.secret-key}")
 private String secretKey;
@@ -31,6 +34,11 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     authz->authz
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/api/employees").permitAll()
+                        .requestMatchers("/api/employees/update/**").permitAll()
+                        .requestMatchers("/api/employees/updatee/**").permitAll()
+                        .requestMatchers("/api/employees/employees").permitAll()
+                        .requestMatchers("/api/employees/delete/**").permitAll()
+                        .requestMatchers("/api/employees/get/**").permitAll()
                         .requestMatchers("/api/employees/register").permitAll()
                         .requestMatchers("/store").permitAll()
                         .requestMatchers("/admin/**").permitAll()

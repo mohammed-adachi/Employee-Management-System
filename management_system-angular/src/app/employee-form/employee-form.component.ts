@@ -27,13 +27,9 @@ export class EmployeeFormComponent implements OnInit {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       post: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
       salaire: ['', Validators.required, Validators.pattern("^[0-9]*$")],
-      action: ['', Validators.required],
-      address: ['', Validators.required],
-      phone: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d{10}$/)  // Validation pour un numéro de téléphone à 10 chiffres
-      ])
     });
 
 

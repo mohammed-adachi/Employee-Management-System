@@ -31,26 +31,5 @@ public class employerService implements UserDetailsService {
         );  
       
     }
-    public emolyer creatEmployer(emolyer user) {
-        return userrepositry.save(user);
-    }
-    public List<emolyer> getEmployers() {
-        return userrepositry.findAll();
-    }
-    public emolyer getEmployer(int id) {
-        return userrepositry.findById(id).orElse(null);
-    }
-    public emolyer updateEmployer(emolyer user) {
-        emolyer existingUser = userrepositry.findById(user.getId()).orElse(null);
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setAddress(user.getAddress());
-        existingUser.setPhone(user.getPhone());
-        return userrepositry.save(existingUser);
-    }   
-    public void deleteEmployer(int id) {
-        userrepositry.deleteById(id);
-         
-    }
+
 }
