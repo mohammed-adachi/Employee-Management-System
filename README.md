@@ -6,7 +6,7 @@ View Employee List: Display a list of all employees with their basic information
 Edit Employee Details: Update employee information.
 View Employee Details: Access detailed information about a specific employee.
 Delete Employee: Remove employees from the system.
-Tech Stack
+Tech Stack.
 Backend: Spring Boot (Java)
 Frontend: Angular
 Database: MySQL
